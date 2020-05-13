@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.MainFragment">
+
+    <ScrollView
+        android:id="@+id/mainScroller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            android:padding="0dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@color/colorPrimary"
+                android:backgroundTintMode="screen"
+                android:orientation="vertical">
+
+                <com.synnapps.carouselview.CarouselView
+                    android:id="@+id/mobileBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    app:fillColor="#FFFFFFFF"
+                    app:pageColor="#00000000"
+                    app:radius="4dp"
+                    app:slideInterval="5000"
+                    app:strokeColor="#FF777777"
+                    app:strokeWidth="1dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/galano_grotesque_bold"
+                    android:padding="8dp"
+                    android:text="@string/homescreen_message"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:padding="@dimen/item_padding">
+
+                        <ImageView
+                            android:id="@+id/accesscontrolImg"
+                            android:layout_width="@dimen/icon_dimension"
+                            android:layout_height="@dimen/icon_dimension"
+                            android:layout_gravity="center"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_hills_cctv_circle_icon" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="CCTV SOLUTIONS"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:padding="@dimen/item_padding">
+
+                        <ImageView
+                            android:id="@+id/cctvImg"
+                            android:layout_width="@dimen/icon_dimension"
+                            android:layout_height="@dimen/icon_dimension"
+                            android:layout_gravity="center"
+                            android:adjustViewBounds="true"
+
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_hills_aci_circle_icon" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ACCESS CONTROL &amp; INTRUSION SOLUTION"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:padding="@dimen/item_padding">
+
+                        <ImageView
+                            android:id="@+id/ictImg"
+                            android:layout_width="@dimen/icon_dimension"
+                            android:layout_height="@dimen/icon_dimension"
+                            android:layout_gravity="center"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/ic_hills_itc_circle_icon" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ICT SOLUTIONS"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+                <!--  <LinearLayout
+                      android:id="@+id/searchLinearLayout"
+                       android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:padding="0dp"
+                      android:alpha="1"
+                      android:layout_marginTop="60dp"
+                      android:layout_marginStart="20dp"
+                      android:layout_marginEnd="20dp"
+                      android:layout_gravity="center_horizontal|bottom"
+                      android:orientation="horizontal"
+                      android:background="@drawable/searcharea_background"
+                      >
+                      <TextView
+                          android:id="@+id/searchText"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:text="Search for a product item..."
+                          android:padding="10dp"/>
+
+                      </LinearLayout>-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/matteBlack"
+                    android:fontFamily="@font/galano_grotesque_regular"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="FEATURED PRODUCTS"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:id="@+id/featured_frameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingTop="0dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="4dp"
+                android:background="#FAF9F9"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/matteBlack"
+                    android:fontFamily="@font/galano_grotesque_regular"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="OUR KEY PARTNERS"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <FrameLayout
+                    android:id="@+id/preferredBrand_frameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</FrameLayout>

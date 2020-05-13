@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "965721132040",
+    "firebase_url": "https://hillsapp-5b438.firebaseio.com",
+    "project_id": "hillsapp-5b438",
+    "storage_bucket": "hillsapp-5b438.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:965721132040:android:f9fa8975b9ab07daead5bd",
+        "android_client_info": {
+          "package_name": "com.hills.hills11"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "965721132040-gsomc71pt7vbo2gg37688b316lds5dlq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDprGuzNUG4mCLhA-RI-rls6X3Kz3fs-jA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "965721132040-gsomc71pt7vbo2gg37688b316lds5dlq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

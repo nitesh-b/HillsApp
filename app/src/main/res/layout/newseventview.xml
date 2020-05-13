@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:clipToPadding="false"
+    android:elevation="4dp"
+    app:cardCornerRadius="5dp"
+
+
+    >
+
+    <LinearLayout
+        android:id="@+id/ne_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+
+            >
+
+            <ImageView
+                android:id="@+id/ne_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                android:adjustViewBounds="true"
+                android:contentDescription="Image"
+                android:src="@drawable/hills_logo_black" />
+
+            <TextView
+                android:id="@+id/ne_imageName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorPrimary"
+                android:padding="4dp"
+                android:text="IMAGE TITLE"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/matteBlack"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ne_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="5dp"
+                android:text="Event Title"
+                android:textColor="#ff8300"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/ne_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="5dp"
+                android:text="The event description goes here"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/knowmore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:text="KNOW MORE>>>"
+                android:textColor="#76c3d4" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

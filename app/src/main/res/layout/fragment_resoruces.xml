@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ResourcesFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/resourcestext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+
+            android:padding="2dp"
+            android:text="Resources"
+            android:textSize="@dimen/heading_text_size" />
+
+        <ImageView
+            android:id="@+id/resavimage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/resheight"
+            android:layout_below="@+id/resourcestext"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/res_av" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/resourcestext"
+            android:layout_alignParentRight="true"
+            android:text="Articles and Videos"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <ImageView
+            android:id="@+id/resFinanceImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/resheight"
+            android:layout_below="@+id/resavimage"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/res_fin" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/resavimage"
+            android:layout_alignParentRight="true"
+            android:text="Finance"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/resPartnerImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/resheight"
+            android:layout_below="@+id/resFinanceImage"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/res_partnerp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/resFinanceImage"
+            android:layout_alignParentRight="true"
+            android:text="Partner Program"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/resLegacyImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/resheight"
+            android:layout_below="@+id/resPartnerImage"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/res_av" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/resPartnerImage"
+            android:layout_alignParentRight="true"
+            android:text="Legacy Firmware Download"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</ScrollView>

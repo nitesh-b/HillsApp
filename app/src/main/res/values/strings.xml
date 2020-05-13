@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">Hills</string>
+
+    <string name="tab_text_1">HOME</string>
+    <string name="tab_text_2">RESOURCES</string>
+    <string name="tab_text_3">LOCATION</string>
+    <string name="tab_text_4">ABOUT US</string>
+
+    <string name="APIKey">AIzaSyAWDK_yIcZiVRIIceIACWH2vdxL-P-Gv2g</string>
+    <string name="open">Open Drawer</string>
+    <string name="close">Close Drawer</string>
+
+
+    <string name="about_genetec">At Genetec, we believe that, in order to create and maintain thriving public spaces, groups, including urban planners, city managers, security experts, enterprise executives, and community leaders, must work together to achieve true public safety. And a cornerstone of this open and collaborative approach is the development and implementation of multipurpose technology.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="aboutus">Hills was built by innovation – one person with one idea that built a company, that almost 70 years on, is still evolving and adapting… Today, that spirit of innovation is focused on delivering technology products and service solutions that connect, entertain and secure. Over the years we have diversified and divested, expanding our product range to include AV, Communications, Security and Surveillance, Fire, Nurse Call and Patient Engagement. But our focus has remained constant – we’re committed to delivering technology solutions into the environments that people need and trust most: their homes, hospitals, places of learning, entertainment venues, retail spaces, workplaces and government institutions.</string>
+    <string name="history">Hills Limited dates back to 1945, when Lance Hill invented the Hills Hoist, a height-adjustable rotary clothes line. With his brother-in-law Harold Ling, Hill manufactured the clothes lines in his backyard in Glenunga, South Australia, before moving production to a nearby factory. Hills Hoists Ltd was formed in January 1948, with Hill as chairman and Ling as a director and by 1954, the factory had relocated to a larger site and was producing six hundred hoists a week for branches across Australia.</string>
+    <string name="vision">To distribute end to end technology solutions that Connect, Entertain and Secure people’s lives.</string>
+    <string name="mission">We will add value by choosing the best products and solutions available while delivering high quality service, advice and expertise for all of our stakeholders.</string>
+    <string name="hint">Type your text Here...</string>
+    <string name="popular_categories">Popular Categories</string>
+
+    <string name="question1">Question1?</string>
+    <string name="answer1">Answer1</string>
+
+    <string name="question2">Question2?</string>
+    <string name="answer2">answer2</string>
+
+    <string name="question3">Question3?</string>
+    <string name="answer3">answer3</string>
+
+    <string name="question4">Question4?</string>
+    <string name="answer4">answer4</string>
+
+    <string name="question5">Question5?</string>
+    <string name="answer5">answer5</string>
+
+    <string name="question6">Question6?</string>
+    <string name="answer6">answer6</string>
+
+    <string name="question7">Question7?</string>
+    <string name="answer7">answer7</string>
+
+    <string name="question8">Question8?</string>
+    <string name="answer8">answer8</string>
+
+    <string name="question9">Question9?</string>
+    <string name="answer9">answer9</string>
+    <string name="preferred_brand_title">Preferred Brand</string>
+    <string name="homescreen_message">PROVIDING ALL YOUR SECURITY SOLUTIONS</string>
+    <string name="faq">FAQs</string>
+
+
+    <!--List of searchable brand-->
+    <string-array name="searchable_item">
+        <item>Adpro</item>
+        <item>Accessory</item>
+        <item>Alarm.COm Tyco</item>
+        <item>Allegion</item>
+        <item>Allied Telesis Ap</item>
+        <item>Assa Abloy</item>
+        <item>Aten</item>
+        <item>Atsumi Electrics</item>
+        <item>Axis</item>
+        <item>Belden</item>
+        <item>Biticino</item>
+        <item>Cambium Networks</item>
+        <item>Century Yuasa</item>
+        <item>Cisco</item>
+        <item>Cognimatics Ab</item>
+        <item>D-link</item>
+        <item>D-Link Aust</item>
+        <item>Dahua</item>
+        <item>Dell</item>
+        <item>Dexin Digital</item>
+        <item>Dotworkz</item>
+        <item>Dsc Tyco</item>
+        <item>Edwards</item>
+        <item>Etherwan Systems</item>
+        <item>Evo</item>
+        <item>Evohd</item>
+        <item>Evonet</item>
+        <item>Exacq Tech</item>
+        <item>Extreme Networks</item>
+        <item>Fargo Printers</item>
+        <item>Fluidmesh</item>
+        <item>Fsh</item>
+
+    </string-array>
+
+</resources>

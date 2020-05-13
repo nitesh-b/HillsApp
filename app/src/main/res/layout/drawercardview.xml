@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:layout_marginBottom="10dp"
+
+    android:clipToPadding="false"
+    android:elevation="4dp"
+    android:orientation="horizontal"
+    app:cardCornerRadius="10dp"
+    app:cardPreventCornerOverlap="true"
+
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/drawer_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/margin_left"
+            android:text="Title"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/drawer_item_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin_left"
+            android:text="Now"
+            android:textSize="10sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/drawer_item_title"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/drawer_item_logo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/margin_left"
+                android:layout_marginTop="@dimen/margin_left"
+                android:layout_marginBottom="@dimen/margin_right"
+                android:background="@drawable/search_background"
+                android:contentDescription="Hills"
+                android:padding="@dimen/drawer_item_padding"
+                android:src="@drawable/hills_logo_black"
+
+                />
+
+            <TextView
+                android:id="@+id/drawer_item_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_left"
+                android:layout_marginTop="@dimen/margin_left"
+                android:layout_marginEnd="@dimen/margin_left"
+                android:layout_marginBottom="@dimen/margin_right"
+                android:padding="@dimen/drawer_item_padding"
+                android:text="This is a test of notification system. This notification is here for no reason."
+
+                android:textAlignment="textStart"
+                android:textStyle="normal" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
