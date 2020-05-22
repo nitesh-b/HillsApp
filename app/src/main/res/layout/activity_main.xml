@@ -11,26 +11,25 @@
     android:orientation="vertical"
     tools:context="searchview.toolbar.com.searchviewtoolbar.MainActivity"
     tools:openDrawer="start"
-
     >
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#EDEDED">
-
         <include
             android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
+            layout="@layout/toolbar"
+            android:layout_alignParentTop="true"
+            />
 
         <FrameLayout
             android:id="@+id/mainFrameLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/bottomNavigation"
-            android:layout_below="@id/toolbar"
-
-            />
+            android:layout_below="@id/toolbar"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
@@ -60,24 +59,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"
+        android:fitsSystemWindows="false"
 
         android:background="@drawable/drawer_background">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/matteBlack">
 
             <TextView
                 android:id="@+id/notification_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:layout_height="?actionBarSize"
                 android:padding="2dp"
                 android:text="Notifications"
                 android:textAlignment="center"
+                android:layout_gravity="bottom"
                 android:textColor="@color/white"
-                android:textSize="@dimen/heading_text_size" />
+                android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/drawer_recyclerView"
@@ -98,6 +99,7 @@
         app:itemIconTint="@color/colorPrimary"
         app:itemTextAppearance="@style/NavigationViewStyle"
         app:itemTextColor="@color/white"
+        android:fitsSystemWindows="false"
 
         >
 
@@ -108,24 +110,20 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="176dp"
-                android:background="@color/white"
-                android:gravity="bottom"
+                android:layout_height="170dp"
+                android:background="@drawable/navbg"
+                android:gravity="start|bottom"
                 android:orientation="vertical"
                 android:padding="16dp">
 
                 <ImageView
                     android:id="@+id/drawerLogo"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/hills_logo_black" />
-
-                <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Welcome"
-                    android:textColor="@color/white"
-                    android:textSize="32sp" />
+
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/creative_logo" />
+
             </LinearLayout>
 
 
@@ -197,6 +195,33 @@
                                 android:layout_marginLeft="20dp"
                                 android:contextClickable="true"
                                 android:text="Special Offers"
+                                android:textColor="@color/textview_item_clicked"
+                                android:theme="@style/NavigationDrawerMainTextStyle" />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="@dimen/row_spacing_bottom"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:id="@+id/imageView"
+                                android:layout_width="29dp"
+                                android:layout_height="36dp"
+                                android:tint="@color/colorPrimary"
+                                app:srcCompat="@drawable/campaign" />
+
+                            <TextView
+                                android:id="@+id/latestUpdatesTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:contextClickable="true"
+                                android:text="latest updates"
                                 android:textColor="@color/textview_item_clicked"
                                 android:theme="@style/NavigationDrawerMainTextStyle" />
 

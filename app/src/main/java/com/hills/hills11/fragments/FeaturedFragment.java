@@ -6,21 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.hills.hills11.FeaturedProducts;
 import com.hills.hills11.R;
-import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageClickListener;
-import com.synnapps.carouselview.ImageListener;
+import com.jama.carouselview.CarouselView;
+import com.jama.carouselview.CarouselViewListener;
+
 
 public class FeaturedFragment extends Fragment {
     final int[] images = {R.drawable.accesscontrol_feature , R.drawable.cctv_feature , R.drawable.ict_feature};
-
+    private ImageView imageView;
     public FeaturedFragment() {
     }
 
@@ -32,34 +32,40 @@ public class FeaturedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view , @Nullable Bundle savedInstanceState) {
         super.onViewCreated ( view , savedInstanceState );
-        CarouselView mCarouselView = view.findViewById ( R.id.carouselView );
-        mCarouselView.setImageListener ( new ImageListener ( ) {
+        CarouselView mCarouselView = view.findViewById ( R.id.carouselViewFeatured );
+        mCarouselView.setResource ( R.layout.carausel_image_featured);
+        mCarouselView.setSize ( images.length );
+        mCarouselView.setCarouselViewListener ( new CarouselViewListener ( ) {
             @Override
-            public void setImageForPosition(int position , ImageView imageView) {
-                imageView.setImageResource ( images[position] );
-                imageView.setScaleType ( ImageView.ScaleType.FIT_CENTER );
+            public void onBindView(View view , final int position) {
+                imageView = view.findViewById ( R.id.carouselImageVIewFeatured );
+                Glide.with ( getContext ( ) )
+                        .load ( images[position] )
+                        .fitCenter ( )
+                        .into ( imageView );
+                imageView.setOnClickListener ( new View.OnClickListener ( ) {
+                    @Override
+                    public void onClick(View v) {
+                        switch (position){
+                            case 0:
+                                startCateloguePage ( position );
+                                break;
+                            case 1:
+                                startCateloguePage ( position );
+                                break;
+                            case 2:
+                                startCateloguePage ( position );
+                                break;
+                        }
+                    }
+                } );
+
             }
         } );
-        mCarouselView.setPageCount ( images.length );
-        mCarouselView.setImageClickListener ( new ImageClickListener ( ) {
-            @Override
-            public void onClick(int position) {
-                switch (position) {
-                    case 0:
-                        // Toast.makeText(getContext(), "Send Access Control", Toast.LENGTH_SHORT).show();
-                        startCateloguePage ( position );
-                        break;
-                    case 1:
-                        // Toast.makeText(getContext(), "Send cctv", Toast.LENGTH_SHORT).show();
-                        startCateloguePage ( position );
-                        break;
-                    case 2:
-                        // Toast.makeText(getContext(), "Send ict", Toast.LENGTH_SHORT).show();
-                        startCateloguePage ( position );
-                        break;
-                }
-            }
-        } );
+        mCarouselView.hideIndicator ( true );
+        mCarouselView.show ();
+
+
     }
 
     private void startCateloguePage(int i) {

@@ -44,10 +44,10 @@ public class NotificationSettings extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull final RemoteMessage remoteMessage) {
         super.onMessageReceived ( remoteMessage );
-
+        db = FirebaseFirestore.getInstance ( );
         fromFCM = remoteMessage.getData ();
         System.out.println ("The data sent was: " + fromFCM);
-        db = FirebaseFirestore.getInstance ( );
+
         String title = remoteMessage.getNotification ( ).getTitle ( );
         String body = remoteMessage.getNotification ( ).getBody ( );
         String image = remoteMessage.getNotification ( ).getImageUrl ( ).toString ( );
@@ -90,9 +90,10 @@ public class NotificationSettings extends FirebaseMessagingService {
     }
 
     public void showNotification(Context context , String title , String body , String image) {
-        Intent notifyIntent = new Intent ( context , LatestUpdatesActivity.class );
-        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create ( context );
+        Intent notifyIntent = new Intent ( this , LatestUpdatesActivity.class );
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create ( this );
         taskStackBuilder.addNextIntentWithParentStack ( notifyIntent );
+
 
         String[] keySet = fromFCM.keySet ().toArray ( new String[0] );
 
@@ -104,13 +105,14 @@ public class NotificationSettings extends FirebaseMessagingService {
             pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
         }else{
+            pendingIntent = taskStackBuilder.getPendingIntent ( 0, PendingIntent.FLAG_UPDATE_CURRENT );
 
-            pendingIntent = PendingIntent.getActivity (
-                    context ,
-                    100 ,
-                    notifyIntent ,
-                    PendingIntent.FLAG_UPDATE_CURRENT
-            );
+//            pendingIntent = PendingIntent.getActivity (
+//                    context ,
+//                    100 ,
+//                    notifyIntent ,
+//                    PendingIntent.FLAG_UPDATE_CURRENT
+//            );
 
         }
         if ( pendingIntent != null) {
@@ -118,14 +120,15 @@ public class NotificationSettings extends FirebaseMessagingService {
             builder.setAutoCancel ( true )
                     .setSmallIcon ( R.drawable.hills_logo_black )
                     .setContentTitle ( title )
-                    .setContentIntent ( pendingIntent )
                     .setContentText ( body )
                     .setContentInfo ( "Info" )
-                    .setPriority ( NotificationCompat.PRIORITY_HIGH );
+                    .setPriority ( NotificationCompat.PRIORITY_HIGH )
+                    .setContentIntent ( pendingIntent );
 
-            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from ( context );
-            notificationManagerCompat.notify ( 1 , builder.build ( ) );
-        }
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from ( this );
+            notificationManagerCompat.notify ( 0 , builder.build ( ) );
+        }else
+            Log.d ( TAG , "showNotification: empty intent: " );
     }
 
 
@@ -134,4 +137,6 @@ public class NotificationSettings extends FirebaseMessagingService {
         super.onNewToken ( s );
         // Log.d(TAG, "onNewToken: " + s);
     }
+
+    intent
 }

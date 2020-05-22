@@ -2,14 +2,12 @@ package com.hills.hills11;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.google.android.flexbox.AlignItems;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,7 +46,7 @@ public class FeaturedProducts extends AppCompatActivity implements RetrieveFromF
     private ImageView mBackImg;
     private TextView mEmptyTextView;
     private String docType = "access_control_and_intrusion";
-    private String[] list = {"Access Control & Intrusion" , "CCTV and Surveillace" , "ICT"};
+    private String[] list = {"Access Control & Intrusion" , "CCTV and Surveillace" , "ITC"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +95,17 @@ public class FeaturedProducts extends AppCompatActivity implements RetrieveFromF
 
         iFirebaseLoadDone = this;
         mRecyclerView = findViewById ( R.id.featured_recyclerView );
-        GridLayoutManager gridLayoutManager = new GridLayoutManager ( this , 2 );
+
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager ( this );
+        layoutManager.setFlexDirection ( FlexDirection.ROW);
+        layoutManager.setJustifyContent ( JustifyContent.CENTER );
+        layoutManager.setFlexWrap ( FlexWrap.WRAP );
+
+        mRecyclerView.setLayoutManager ( layoutManager );
+
+        /*GridLayoutManager gridLayoutManager = new GridLayoutManager ( this , 2 );
         gridLayoutManager.setOrientation ( RecyclerView.VERTICAL );
-        mRecyclerView.setLayoutManager ( gridLayoutManager );
+        mRecyclerView.setLayoutManager ( gridLayoutManager );*/
         switch (t) {
             case 0:
                 mSpinner.setSelection ( t );

@@ -3,16 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.FeaturedFragment">
+    android:layout_height="wrap_content"
+    tools:context=".fragments.FeaturedFragment"
+    >
 
-    <com.synnapps.carouselview.CarouselView
-        android:id="@+id/carouselView"
+    <com.jama.carouselview.CarouselView
+        android:id="@+id/carouselViewFeatured"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/background_feature"
-        app:radius="4dp"
-
-        app:slideInterval="5000" />
+        android:layout_height="wrap_content"
+        app:enableSnapping="false"
+        app:scaleOnScroll="true"
+        app:setAutoPlay="true"
+        app:setAutoPlayDelay="4000"
+        app:carouselOffset="center"
+        app:indicatorAnimationType="drop"
+        app:indicatorRadius="3"
+        app:indicatorPadding="4"
+        app:indicatorSelectedColor="@color/colorPrimary"
+        app:indicatorUnselectedColor="@color/white"
+        android:background="@drawable/gradient_featured"/>
 
 </FrameLayout>

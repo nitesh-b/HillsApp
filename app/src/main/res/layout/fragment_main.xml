@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".fragments.MainFragment">
 
     <ScrollView
@@ -14,30 +13,34 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:isScrollContainer="true"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="0dp">
-
+            >
+            <com.jama.carouselview.CarouselView
+                android:id="@+id/mobileBanner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:enableSnapping="false"
+                app:scaleOnScroll="true"
+                app:setAutoPlay="true"
+                app:setAutoPlayDelay="4000"
+                app:carouselOffset="center"
+                app:indicatorAnimationType="drop"
+                app:indicatorRadius="3"
+                app:indicatorPadding="4"
+                app:indicatorSelectedColor="@color/colorPrimary"
+                app:indicatorUnselectedColor="@color/white"
+                android:background="@color/matteBlack"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="1dp"
+                android:layout_weight="0.5"
                 android:background="@color/colorPrimary"
                 android:backgroundTintMode="screen"
                 android:orientation="vertical">
-
-                <com.synnapps.carouselview.CarouselView
-                    android:id="@+id/mobileBanner"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    app:fillColor="#FFFFFFFF"
-                    app:pageColor="#00000000"
-                    app:radius="4dp"
-                    app:slideInterval="5000"
-                    app:strokeColor="#FF777777"
-                    app:strokeWidth="1dp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -53,14 +56,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:weightSum="3"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="@dimen/item_padding">
 
@@ -95,7 +98,6 @@
                             android:layout_height="@dimen/icon_dimension"
                             android:layout_gravity="center"
                             android:adjustViewBounds="true"
-
                             android:scaleType="fitXY"
                             android:src="@drawable/ic_hills_aci_circle_icon" />
 
@@ -135,32 +137,11 @@
                     </LinearLayout>
 
                 </LinearLayout>
-                <!--  <LinearLayout
-                      android:id="@+id/searchLinearLayout"
-                       android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:padding="0dp"
-                      android:alpha="1"
-                      android:layout_marginTop="60dp"
-                      android:layout_marginStart="20dp"
-                      android:layout_marginEnd="20dp"
-                      android:layout_gravity="center_horizontal|bottom"
-                      android:orientation="horizontal"
-                      android:background="@drawable/searcharea_background"
-                      >
-                      <TextView
-                          android:id="@+id/searchText"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:text="Search for a product item..."
-                          android:padding="10dp"/>
-
-                      </LinearLayout>-->
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="1dp"
                 android:orientation="vertical">
 
@@ -185,9 +166,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="1dp"
                 android:layout_marginBottom="4dp"
+
                 android:background="#FAF9F9"
                 android:orientation="vertical">
 

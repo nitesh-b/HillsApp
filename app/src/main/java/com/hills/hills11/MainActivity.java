@@ -44,6 +44,7 @@ import com.hills.hills11.fragments.LocationFragment;
 import com.hills.hills11.fragments.MainFragment;
 import com.hills.hills11.fragments.NewsEventsFragment;
 import com.hills.hills11.notification.NotificationDetails;
+import com.hills.hills11.notification.NotificationSettings;
 import com.hills.hills11.notification.NotificationUpdates;
 import com.hills.hills11.notification.Notificationchannel;
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FirebaseFirestore db;
     private Toolbar mToolbar;
     /*---------------Navigation view objects---------------------------------*/
-    private TextView mArticle, mFinance, mPartner, mLegacy, mFaqs, mContact, mSpecialOfferText, mAlwaysLowPrice;
+    private TextView mArticle, mFinance, mPartner, mLegacy, mFaqs, mContact, mSpecialOfferText, mAlwaysLowPrice, mLatestUpdates;
     private ImageView facebook, linkedIn, youtube;
     /*--------------Initialise objects for bottom Navigation------------------------*/
     private BottomNavigationView bottomNavigationView;
@@ -104,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAlwaysLowPrice = findViewById ( R.id.alwaysLowPriceText );
         mAlwaysLowPrice.setOnClickListener ( this );
 
+        mLatestUpdates = findViewById ( R.id.latestUpdatesTextView );
+        mLatestUpdates.setOnClickListener ( this );
+
         bottomNavigationView = findViewById ( R.id.bottomNavigation );
         mainFrame = findViewById ( R.id.mainFrameLayout );
         eventFragment = new NewsEventsFragment ( );
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
-                        Log.d ( TAG , "onComplete: token" + token );
+                        Log.d ( TAG , "onComplete: token " + token );
                     }
                 });
         /*--------------------------------------------------------------------------------------------------------------------------*/
@@ -204,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart ( );
+        new NotificationSettings ();
         ConnectionDetector detector = new ConnectionDetector ( this );
         if ( detector.isConnected ( ) ) {
             // Toast.makeText(this, "Connected to Internet", Toast.LENGTH_SHORT).show();
@@ -303,6 +308,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 openActivity ( SpecialProduct.class );
                 break;
 
+            case R.id.latestUpdatesTextView:
+                mLatestUpdates.setSelected ( true );
+                openActivity ( LatestUpdatesActivity.class );
+                break;
+
             case R.id.articleandvidoes:
                 url = "https://www.hills.com.au/articles-and-videos";
                 startBrowser ( url );
@@ -337,18 +347,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.facebookIcon:
                 facebook.setSelected ( true );
                 menuDrawer.closeDrawer ( GravityCompat.START );
-                url = "hhttps://www.facebook.com/HillsLtd/";
+                url = "https://www.facebook.com/HillsLtd/";
                 startBrowser ( url );
+                break;
             case R.id.linkedInIcon:
                 linkedIn.setSelected ( true );
                 menuDrawer.closeDrawer ( GravityCompat.START );
                 url = "https://www.linkedin.com/company/hills-holdings-ltd/?originalSubdomain=in";
                 startBrowser ( url );
+                break;
             case R.id.youtubeIcon:
                 linkedIn.setSelected ( true );
                 menuDrawer.closeDrawer ( GravityCompat.START );
                 url = "https://www.youtube.com/channel/UCfDQtHUtyG0nIU3a_R0ooDw";
                 startBrowser ( url );
+                break;
 
 
         }

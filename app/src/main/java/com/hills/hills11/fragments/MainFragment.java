@@ -16,21 +16,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.api.LogDescriptor;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hills.hills11.R;
-import com.hills.hills11.SearchActivity;
+import com.hills.hills11.data.CarouselImageLink;
+import com.hills.hills11.data.ProductsDetails;
 import com.hills.hills11.firebase.BannerImageRetrieve;
-import com.squareup.picasso.Picasso;
-import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageListener;
+import com.jama.carouselview.CarouselView;
+import com.jama.carouselview.CarouselViewListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +41,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Bann
     private TextView mSearchText;
     private CarouselView carouselView;
     private FirebaseFirestore db;
+    private ImageView imageView;
 
 
     private BannerImageRetrieve iImageLoadDone;
@@ -97,7 +97,28 @@ public class MainFragment extends Fragment implements View.OnClickListener, Bann
 
     private void populateBanner() {
 
-        db.collection ( "BannerImages" )
+        db.collection ( "CarouselImages" ).get().addOnCompleteListener ( new OnCompleteListener<QuerySnapshot> ( ) {
+            List<CarouselImageLink> mList = new ArrayList<> ( );
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            if (task.isSuccessful ()){
+                for(QueryDocumentSnapshot documentSnapshot: task.getResult ()){
+                    CarouselImageLink imageLink = new CarouselImageLink (
+                    documentSnapshot.getData ().get ( "image" ).toString (),
+                    documentSnapshot.getData ().get("link" ).toString ());
+            mList.add ( imageLink );
+                }
+                iImageLoadDone.onCarouselImageLoadSuccess ( mList );
+            }else{
+                iImageLoadDone.onFireBaseImageLoadFailed ( "Problem Retrieving Carousel Images." );
+            }
+
+
+
+            }
+        } );
+
+       /* db.collection ( "BannerImages" )
                 .document ( "Images" )
                 .get ( ).addOnCompleteListener ( new OnCompleteListener<DocumentSnapshot> ( ) {
             @Override
@@ -112,7 +133,7 @@ public class MainFragment extends Fragment implements View.OnClickListener, Bann
                 }
             }
         } );
-
+*/
 
     }
 
@@ -145,22 +166,66 @@ public class MainFragment extends Fragment implements View.OnClickListener, Bann
     }
 
     @Override
-    public void onFireBaseImageLoadSuccess(final Map<String, Object> mapVal) {
+    public void onCarouselImageLoadSuccess(final List<CarouselImageLink> mList){
+        carouselView.setResource ( R.layout.carousel_image );
+        carouselView.setSize( mList.size ( ));
+        carouselView.setCarouselViewListener(new CarouselViewListener () {
+            @Override
+            public void onBindView(View view, final int position) {
+                // setting up a full image carousel
+                ImageView imageView = view.findViewById ( R.id.carouselImageVIew );
+                imageView.setOnClickListener ( new View.OnClickListener ( ) {
+                    @Override
+                    public void onClick(View v) {
+                        gotoWebsite ( mList.get ( position ).getLink () );
+                    }
+                } );
+
+                Glide.with ( getContext ( ) )
+                        .load ( mList.get ( position ).getImage () )
+                        .fitCenter ( )
+                        .into ( imageView );
+
+
+            }
+        });
+
+        // After you finish setting up, show the CarouselView
+        carouselView.show();
+
+
+    }
+ /*   public void onFireBaseImageLoadSuccess(final Map<String, Object> mapVal) {
         final List<Object> list = new ArrayList<> ( mapVal.values ( ) );
 
-
         Log.d ( TAG , "onFireBaseImageLoadSuccess: converted" + list );
-        carouselView.setImageListener ( new ImageListener ( ) {
+
+        carouselView.setResource ( R.layout.carousel_image );
+        carouselView.setSize(list.size ());
+        carouselView.setCarouselViewListener(new CarouselViewListener () {
             @Override
-            public void setImageForPosition(int position , ImageView imageView) {
+            public void onBindView(View view, int position) {
+                // setting up a full image carousel
+                ImageView imageView = view.findViewById ( R.id.carouselImageVIew );
+                imageView.setOnClickListener ( new View.OnClickListener ( ) {
+                    @Override
+                    public void onClick(View v) {
+
+
+                    }
+                } );
+
                 Glide.with ( getContext ( ) )
                         .load ( list.get ( position ) )
                         .fitCenter ( )
                         .into ( imageView );
+
+
             }
-        } );
-        carouselView.setPageCount ( mapVal.size ( ) );
-    }
+        });
+        // After you finish setting up, show the CarouselView
+        carouselView.show();
+    }*/
 
     @Override
     public void onFireBaseImageLoadFailed(String message) {
