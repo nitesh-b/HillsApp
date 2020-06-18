@@ -7,6 +7,7 @@ import androidx.core.app.NotificationManagerCompat;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -28,18 +29,27 @@ public class SplashScreen extends AppCompatActivity {
         setContentView ( R.layout.activity_splash_screen );
         Intent intent = getIntent ();
         Bundle extras = intent.getExtras ();
-        if (extras != null) {
-            for (String key : extras.keySet()) {
-                Object value = extras.get(key);
-                Log.d(TAG, "Extras received at onCreate:  Key: " + key + " Value: " + value);
+       // System.out.println ("deepcopy: " + intent.getExtras ().getBundle ( "data" ));
+        if ((extras != null)) {
+            if (extras.containsKey ( "url" )){
+                System.out.println (extras.get ( "url" ) );
+                System.out.println ("URL detected" );
+                startActivity (new Intent(Intent.ACTION_VIEW, Uri.parse( (String) extras.get ( "url" ) )));
+            } else if(extras.getInt ( "profile" ) == 0){
+
             }
-            Log.d ( TAG , "onCreate: Message: " + extras.getString ( "body" ) );
+
+            else{
+                System.out.println ("EXTRA: " + extras );
+                System.out.println ("URL not detected" );
+                startActivity ( new Intent ( this , LatestUpdatesActivity.class ) );
+            }
+
+        }else{
+            System.out.println ("Starting Main Branch" );
+            startActivity ( new Intent ( this , MainActivity.class ) );
+            finish ( );
         }
-
-
-        startActivity ( new Intent ( this , MainActivity.class ) );
-        finish ( );
-
 
     }
 

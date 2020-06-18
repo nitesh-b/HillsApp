@@ -14,10 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.hills.hills11.LatestUpdatesActivity;
@@ -47,46 +50,50 @@ public class NotificationSettings extends FirebaseMessagingService {
         db = FirebaseFirestore.getInstance ( );
         fromFCM = remoteMessage.getData ();
         System.out.println ("The data sent was: " + fromFCM);
-
-        String title = remoteMessage.getNotification ( ).getTitle ( );
-        String body = remoteMessage.getNotification ( ).getBody ( );
-        String image = remoteMessage.getNotification ( ).getImageUrl ( ).toString ( );
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat ( "dd-MM-yyyy hh:mm:ss" );
-        String currentTime = simpleDateFormat.format ( Calendar.getInstance ( ).getTimeInMillis ( ) );
         if ( remoteMessage.getNotification ( ) != null ) {
+            String title = remoteMessage.getNotification ( ).getTitle ( );
+            String body = remoteMessage.getNotification ( ).getBody ( );
+            String image = remoteMessage.getNotification ( ).getImageUrl ( ).toString ( );
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat ( "dd-MM-yyyy hh:mm:ss" );
+            final String currentTime = simpleDateFormat.format ( Calendar.getInstance ( ).getTimeInMillis ( ) );
+
             backup.put ( "title" , title );
             backup.put ( "time" , currentTime );
             backup.put ( "description" , body );
             if(!image.isEmpty ())
-            backup.put ( "icon" , image );
+                backup.put ( "icon" , image );
             if(fromFCM.containsKey ( "url" )){
                 backup.put ( "url", fromFCM.get ( "url" ) );
             }
-            @SuppressLint("HardwareIds") String android_id = Settings.Secure.getString ( this.getContentResolver ( ) ,
-                    Settings.Secure.ANDROID_ID );
-            db.collection ( "notification" )
-                    .document ( "history" )
-                    .collection ( android_id )
-                    .document ( currentTime )
-                    .set ( backup )
-                    .addOnSuccessListener ( new OnSuccessListener<Void> ( ) {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d ( "TAG" , "DocumentSnapshot for notification successfully written!" );
-                            Log.d ( "notification" , "onSuccess: " + remoteMessage.getNotification ( ).getIcon ( ) );
+            FirebaseInstanceId.getInstance ().getInstanceId ().addOnCompleteListener ( new OnCompleteListener<InstanceIdResult> ( ) {
+                @Override
+                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (task.isSuccessful ()){
+                            System.out.println ("Token generated: " + task.getResult ().getToken () );
+                            saveNotificationToFirebase(task.getResult ().getToken (), currentTime);
                         }
-                    } )
-                    .addOnFailureListener ( new OnFailureListener ( ) {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText ( NotificationSettings.this , "Could not save your notification" , Toast.LENGTH_SHORT ).show ( );
-                        }
-                    } );
+                }
+            } );
 
             showNotification ( getApplicationContext ( ) , title , body , image );
 
         }
+    }
+
+    public void saveNotificationToFirebase(String token, String currentTime){
+
+        db.collection ( "notification" )
+                .document ( "history" )
+                .collection ( token )
+                .document ( currentTime )
+                .set ( backup )
+                .addOnFailureListener ( new OnFailureListener ( ) {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText ( NotificationSettings.this , "Could not save your notification" , Toast.LENGTH_SHORT ).show ( );
+                    }
+                } );
     }
 
     public void showNotification(Context context , String title , String body , String image) {
@@ -106,13 +113,6 @@ public class NotificationSettings extends FirebaseMessagingService {
 
         }else{
             pendingIntent = taskStackBuilder.getPendingIntent ( 0, PendingIntent.FLAG_UPDATE_CURRENT );
-
-//            pendingIntent = PendingIntent.getActivity (
-//                    context ,
-//                    100 ,
-//                    notifyIntent ,
-//                    PendingIntent.FLAG_UPDATE_CURRENT
-//            );
 
         }
         if ( pendingIntent != null) {
@@ -138,5 +138,5 @@ public class NotificationSettings extends FirebaseMessagingService {
         // Log.d(TAG, "onNewToken: " + s);
     }
 
-    intent
+
 }

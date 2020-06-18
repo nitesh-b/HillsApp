@@ -63,8 +63,8 @@ public class FeaturedProducts extends AppCompatActivity implements RetrieveFromF
                 startActivity ( new Intent ( FeaturedProducts.this , MainActivity.class ) );
             }
         } );
-        ArrayAdapter<String> adapter = new ArrayAdapter<String> ( this , R.layout.spinner_item , list );
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> ( this , android.R.layout.simple_spinner_dropdown_item , list );
+        adapter.setDropDownViewResource ( R.layout.spinner_item );
         mSpinner.setAdapter ( adapter );
         mSpinner.setOnItemSelectedListener ( new AdapterView.OnItemSelectedListener ( ) {
             @Override

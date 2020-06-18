@@ -36,7 +36,7 @@
         <activity android:name=".SearchActivity" />
         <activity
             android:name=".LatestUpdatesActivity"
-            android:parentActivityName=".SplashScreen" />
+            />
 
 
         <meta-data

@@ -118,23 +118,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Bann
             }
         } );
 
-       /* db.collection ( "BannerImages" )
-                .document ( "Images" )
-                .get ( ).addOnCompleteListener ( new OnCompleteListener<DocumentSnapshot> ( ) {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if ( task.isSuccessful ( ) ) {
-                    Map<String, Object> value = task.getResult ( ).getData ( );
-                    Log.d ( TAG , "onComplete: keyVal" + value );
-                    iImageLoadDone.onFireBaseImageLoadSuccess ( value );
-                } else {
-                    Log.d ( TAG , "Cached get failed: " , task.getException ( ) );
-                    iImageLoadDone.onFireBaseImageLoadFailed ( "No image obtained" );
-                }
-            }
-        } );
-*/
-
     }
 
 
@@ -195,37 +178,6 @@ public class MainFragment extends Fragment implements View.OnClickListener, Bann
 
 
     }
- /*   public void onFireBaseImageLoadSuccess(final Map<String, Object> mapVal) {
-        final List<Object> list = new ArrayList<> ( mapVal.values ( ) );
-
-        Log.d ( TAG , "onFireBaseImageLoadSuccess: converted" + list );
-
-        carouselView.setResource ( R.layout.carousel_image );
-        carouselView.setSize(list.size ());
-        carouselView.setCarouselViewListener(new CarouselViewListener () {
-            @Override
-            public void onBindView(View view, int position) {
-                // setting up a full image carousel
-                ImageView imageView = view.findViewById ( R.id.carouselImageVIew );
-                imageView.setOnClickListener ( new View.OnClickListener ( ) {
-                    @Override
-                    public void onClick(View v) {
-
-
-                    }
-                } );
-
-                Glide.with ( getContext ( ) )
-                        .load ( list.get ( position ) )
-                        .fitCenter ( )
-                        .into ( imageView );
-
-
-            }
-        });
-        // After you finish setting up, show the CarouselView
-        carouselView.show();
-    }*/
 
     @Override
     public void onFireBaseImageLoadFailed(String message) {

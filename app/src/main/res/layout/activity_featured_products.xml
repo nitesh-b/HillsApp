@@ -45,22 +45,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="1dp"
-           android:dropDownSelector="@color/white"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+
+
             />
 
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/colorPrimary"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="10dp"/>
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/featured_recyclerView"
+        android:background="#F1EDED"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/featuredLinearLayout" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/featuredLinearLayout"
-
         android:id="@+id/textViewEmpty"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/featured_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/featuredLinearLayout" />
-
 </RelativeLayout>

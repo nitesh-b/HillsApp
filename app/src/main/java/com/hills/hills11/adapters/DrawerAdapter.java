@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,10 +53,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
             @Override
             public void onClick(View v) {
                 if(notify.getUrl ()==null){
-                    mContext.startActivity ( new Intent ( mContext , LatestUpdatesActivity.class ) );
+                    Intent myIntent = new Intent ( mContext , LatestUpdatesActivity.class );
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity ( myIntent);
                 } else
                 {
-                   mContext.startActivity ( new Intent ( Intent.ACTION_VIEW , Uri.parse ( notify.getUrl () ) ));
+                    Toast.makeText ( mContext , notify.getUrl () , Toast.LENGTH_SHORT ).show ( );
+                    Intent myIntent = new Intent ( Intent.ACTION_VIEW , Uri.parse ( notify.getUrl () ) );
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                   mContext.startActivity ( myIntent );
                 }
 
 

@@ -33,11 +33,11 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/topLinerLayout"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="This page shows recent updates: possibly recently sent eDM with their link"
-        android:textSize="30sp" />
+   <androidx.recyclerview.widget.RecyclerView
+       android:layout_below="@+id/topLinerLayout"
+       android:id="@+id/latest_update_recyclerview"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:background="@color/colorPrimary"
+       />
 </RelativeLayout>

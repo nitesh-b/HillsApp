@@ -82,8 +82,6 @@ public class PreferredBrandFragment extends Fragment implements RetrieveFromFire
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if ( task.isSuccessful ( ) ) {
                             for (QueryDocumentSnapshot document : task.getResult ( )) {
-
-                                Log.d ( TAG , document.getId ( ) + " => " + document.getData ( ) );
                                 PreferredBrandDetails details = new PreferredBrandDetails (
                                         document.getData ( ).get ( "logo" ).toString ( ) ,
                                         document.getData ( ).get ( "link" ).toString ( )

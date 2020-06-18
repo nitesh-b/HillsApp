@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:padding="2dp">
 
+
     <fragment
         android:id="@+id/mapId"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -12,23 +13,40 @@
         android:layout_margin="0dp"
         tools:context=".MapsActivity" />
 
-    <Button
-        android:id="@+id/nearMeBtn"
-        android:elevation="4dp"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
+    <LinearLayout
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:paddingStart="6dp"
-        android:paddingEnd="6dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:alpha="1"
-        android:background="@drawable/custom_border2"
-        android:clickable="true"
-        android:text="HILLS NEAR ME"
-        android:fontFamily="@font/galano_grotesque_regular"
-        android:textColor="@color/matteBlack"
-        android:textSize="12sp" />
+        android:background="@drawable/custom_border3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadingEdgeLength="10dp"
+        android:elevation="8dp"
+        android:clipToPadding="false"
+        android:outlineProvider="bounds"
+        android:orientation="horizontal">
+        <Spinner
+            android:id="@+id/selectStateSpinner"
+            android:layout_width="0dp"
+            android:layout_weight="0.7"
+            android:tooltipText="Select State"
+            android:pointerIcon="context_menu"
+            android:layout_height="match_parent"/>
+        <Spinner
+            android:id="@+id/selectBranchSpinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+        <Button
+            android:padding="4dp"
+            android:background="@drawable/custom_border3"
+            android:id="@+id/mapGetDetailsButton"
+            android:layout_width="0dp"
+            android:layout_weight="0.6"
+
+            android:layout_height="wrap_content"
+            android:text="Get Details"
+            android:fontFamily="@font/galano_grotesque_regular"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>

@@ -12,9 +12,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -25,29 +27,26 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.hills.hills11.adapters.DrawerAdapter;
 import com.hills.hills11.connectiondetector.ConnectionDetector;
-import com.hills.hills11.fragments.DummyFragment;
 import com.hills.hills11.fragments.LocationFragment;
 import com.hills.hills11.fragments.MainFragment;
 import com.hills.hills11.fragments.NewsEventsFragment;
 import com.hills.hills11.notification.NotificationDetails;
 import com.hills.hills11.notification.NotificationSettings;
-import com.hills.hills11.notification.NotificationUpdates;
 import com.hills.hills11.notification.Notificationchannel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // private int[] icons = {R.drawable.ic_home_run, R.drawable.ic_resources, R.drawable.ic_event, R.drawable.ic_map, R.drawable.ic_aboutus};
     private DrawerLayout drawerLayout;// notification drawer
     private DrawerLayout menuDrawer; // navigation drawer
+    private RecyclerView drawerRecyclerView;
     private FirebaseFirestore db;
     private Toolbar mToolbar;
     /*---------------Navigation view objects---------------------------------*/
@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private NewsEventsFragment eventFragment;
     private MainFragment mainFragment;
     private LocationFragment locationFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mContact = findViewById ( R.id.contactUs );
         mContact.setOnClickListener ( this );
         navigationView = findViewById ( R.id.nav_menuDrawer );
+
+        drawerRecyclerView = findViewById ( R.id.drawer_recyclerView );
 
         facebook = findViewById ( R.id.facebookIcon );
         facebook.setOnClickListener ( this );
@@ -117,33 +118,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottomNavigationView.getMenu ( ).getItem ( 1 ).setChecked ( true );
         getSupportFragmentManager ( ).beginTransaction ( ).replace ( R.id.mainFrameLayout , mainFragment ).commit ( );
 
-
-
         /*--------------------------------------------------------------------------------------------------------------------------*/
         db = FirebaseFirestore.getInstance ( ); // initialize firebase
 
-        /*-------------------Create Notification Channel-----------------------------*/
+        /*-------------------Create Notification Channel-----------------------------------------------------------------------------*/
+
         Notificationchannel notificationchannel = new Notificationchannel ( this );
         notificationchannel.createNotificationChannel ( );
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult> () {
+        FirebaseInstanceId.getInstance ( ).getInstanceId ( )
+                .addOnCompleteListener ( new OnCompleteListener<InstanceIdResult> ( ) {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
+                        if ( !task.isSuccessful ( ) ) {
+                            Log.w ( TAG , "getInstanceId failed" , task.getException ( ) );
                             return;
                         }
 
                         // Get new Instance ID token
-                        String token = task.getResult().getToken();
+                        String token = task.getResult ( ).getToken ( );
                         Log.d ( TAG , "onComplete: token " + token );
                     }
-                });
+                } );
         /*--------------------------------------------------------------------------------------------------------------------------*/
+
         setUpNotificationDrawer ( );
 
-
-        /*---------------------------------------------------------------------------*/
+        new NotificationFirebase ().execute ( getApplicationContext () );
+        ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle ( this, drawerLayout , R.string.open , R.string.close );
+        drawerLayout.addDrawerListener ( mToggle );
+        mToggle.syncState ( );
+        /*--------------------------------------------------------------------------------------------------------------------------*/
         /*left Navigation Drawer Setup*/
         menuDrawer = findViewById ( R.id.drawer );
         mToolbar = findViewById ( R.id.toolbar );
@@ -153,10 +157,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuDrawer.addDrawerListener ( tog );
         tog.setDrawerIndicatorEnabled ( true );
         tog.syncState ( );
-        /*---------------------------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------------------------------------------------*/
 
-        /*---------------------------------------------------------------------------*/
-        /*-------------------Bottom Navigation Drawer------------------------*/
+        /*----------------------------------------Bottom Navigation Drawer----------------------------------------------------------*/
         bottomNavigationView.setOnNavigationItemSelectedListener ( new BottomNavigationView.OnNavigationItemSelectedListener ( ) {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -183,32 +186,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         /*---------------------------------------------------------------------------*/
 
-
-    }
-
-    private void setFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager ( ).beginTransaction ( );
-        fragmentTransaction.replace ( R.id.mainFrameLayout , fragment ).commit ( );
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater ( ).inflate ( R.menu.additional_menu , menu );
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if ( item.getItemId ( ) == R.id.notificationIcon ) {
-            drawerLayout.openDrawer ( Gravity.RIGHT );
-        }
-        return super.onOptionsItemSelected ( item );
     }
 
     @Override
     protected void onStart() {
         super.onStart ( );
-        new NotificationSettings ();
+        new NotificationSettings ( );
         ConnectionDetector detector = new ConnectionDetector ( this );
         if ( detector.isConnected ( ) ) {
             // Toast.makeText(this, "Connected to Internet", Toast.LENGTH_SHORT).show();
@@ -248,38 +231,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager ( ).beginTransaction ( );
+        fragmentTransaction.replace ( R.id.mainFrameLayout , fragment ).commit ( );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater ( ).inflate ( R.menu.additional_menu , menu );
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if ( item.getItemId ( ) == R.id.notificationIcon ) {
+            drawerLayout.openDrawer ( Gravity.RIGHT );
+        }
+        return super.onOptionsItemSelected ( item );
+    }
+
 
     private void setUpNotificationDrawer() {
-        /*Creating a channel for notification*/
-        RecyclerView drawerRecyclerView = findViewById ( R.id.drawer_recyclerView );
         drawerLayout = findViewById ( R.id.drawer );
         drawerRecyclerView.setHasFixedSize ( true );
-        NotificationUpdates details = new NotificationUpdates ( getApplicationContext ( ) );
-
-        /* Log.d(TAG, "setUpNotification: " + dateTime);*/
         drawerRecyclerView.setLayoutManager ( new LinearLayoutManager ( this ) );
-        Log.d ( TAG , "setUpNotification: I am here" );
-        List<NotificationDetails> notificationList = details.getDetails ( );
-        final DrawerAdapter drawerAdapter = new DrawerAdapter ( this , notificationList );
-        drawerRecyclerView.setAdapter ( drawerAdapter );
-        drawerAdapter.notifyDataSetChanged ( );
-        ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle ( this , drawerLayout , R.string.open , R.string.close );
-        drawerLayout.addDrawerListener ( mToggle );
-        mToggle.syncState ( );
 
-        /*Listen for additional document in firebase*/
-        db.collection ( "notification" )
-                .document ( "history" )
-                .collection ( "timestamp" )
-                .addSnapshotListener ( new EventListener<QuerySnapshot> ( ) {
-                    @Override
-                    public void onEvent(@androidx.annotation.Nullable QuerySnapshot queryDocumentSnapshots , @androidx.annotation.Nullable FirebaseFirestoreException e) {
-                        if ( e != null ) {
-                            Toast.makeText ( getApplicationContext ( ) , "Problem retrieving Data" , Toast.LENGTH_SHORT ).show ( );
-                        } else
-                            drawerAdapter.notifyDataSetChanged ( );
-                    }
-                } );
 
     }
 
@@ -369,6 +345,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void openActivity(Class activity) {
+        finish ();
         startActivity ( new Intent ( MainActivity.this , activity ) );
         menuDrawer.closeDrawer ( GravityCompat.START );
     }
@@ -378,5 +355,77 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity ( browse );
     }
 
+    private class NotificationFirebase extends AsyncTask<Context, Void, Context> {
 
+        private List<NotificationDetails> notificationDetailsList;
+
+        @Override
+        protected Context doInBackground(Context... contexts) {
+            Context context = contexts[0];
+            Log.d ( TAG , "doInBackground: "+ notificationDetailsList );
+
+            FirebaseInstanceId.getInstance ( ).getInstanceId ( ).addOnCompleteListener ( new OnCompleteListener<InstanceIdResult> ( ) {
+                @Override
+                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    if ( task.isSuccessful ( ) ) {
+                        String token = task.getResult ( ).getToken ( );
+                        System.out.println ( "Task is successful with Instance ID: " + token );
+                        retriveNotificationUpdates ( token );
+                    }
+                }
+            } );
+            return context;
+        }
+
+        @Override
+        protected void onPostExecute(Context context) {
+            super.onPostExecute ( context );
+            Log.d ( TAG , "onPostExecute: "+ notificationDetailsList );
+
+        }
+
+        public void retriveNotificationUpdates(String token) {
+
+
+            notificationDetailsList = new ArrayList<> ( );
+            db.collection ( "notification" )
+                    .document ( "history" )
+                    .collection ( token )
+                    .get ( ).addOnCompleteListener ( new OnCompleteListener<QuerySnapshot> ( ) {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if ( task.isSuccessful ( ) ) {
+
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult ( )) {
+                            if ( documentSnapshot.getData ( ).containsKey ( "url" ) ) {
+                                NotificationDetails details = new NotificationDetails (
+                                        documentSnapshot.getData ( ).get ( "title" ).toString ( ) ,
+                                        documentSnapshot.getData ( ).get ( "time" ).toString ( ) ,
+                                        documentSnapshot.getData ( ).get ( "description" ).toString ( ) ,
+                                        documentSnapshot.getData ( ).get ( "icon" ).toString ( ) ,
+                                        documentSnapshot.getData ( ).get ( "url" ).toString ( ) );
+                                Log.d ( TAG , "onComplete: I am seeing this. NOtification Added" );
+                                notificationDetailsList.add ( details );
+                            } else {
+                                NotificationDetails details = new NotificationDetails (
+                                        documentSnapshot.getData ( ).get ( "title" ).toString ( ) ,
+                                        documentSnapshot.getData ( ).get ( "time" ).toString ( ) ,
+                                        documentSnapshot.getData ( ).get ( "description" ).toString ( ) ,
+                                        documentSnapshot.getData ( ).get ( "icon" ).toString ( ) );
+                                Log.d ( TAG , "onComplete: I am seeing this. Notification Added" );
+                                notificationDetailsList.add ( details );
+
+                            }
+                        }
+                        final DrawerAdapter drawerAdapter = new DrawerAdapter ( getApplicationContext () , notificationDetailsList );
+                        drawerRecyclerView.setAdapter ( drawerAdapter );
+                        drawerAdapter.notifyDataSetChanged ( );
+
+                    }
+
+                }
+            } );
+        }
+
+    }
 }

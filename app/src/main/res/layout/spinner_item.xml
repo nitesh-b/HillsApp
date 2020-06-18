@@ -8,4 +8,7 @@
     android:background="#0383B2"
     android:textColor="@color/white"
     android:textSize="14sp"
+    android:ellipsize="end"
+    style="?android:attr/spinnerItemStyle"
+    android:singleLine="true"
     />

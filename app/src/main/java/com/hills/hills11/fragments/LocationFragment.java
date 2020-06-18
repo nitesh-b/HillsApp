@@ -15,8 +15,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,7 +47,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.inappmessaging.CommonTypesProto;
 import com.hills.hills11.R;
+import com.hills.hills11.constants.MapStringConstants;
+import com.hills.hills11.data.LocationDetailData;
+import com.hills.hills11.dialog.BranchDetailDialog;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -59,23 +66,23 @@ import static android.content.ContentValues.TAG;
 public class LocationFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
 
     //Constants
-    private static final LatLng alexandria = new LatLng ( -33.9177997 , 151.1899165 );
+
     private static final LatLng lidcombe = new LatLng ( -33.8586621 , 151.0563521 );
     private static final LatLng silverwater = new LatLng ( -33.8270365 , 151.0468572 );
-    private static final LatLng sevenhills = new LatLng ( -33.7682097 , 150.9486464 );
+
     private static final int LOCATION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 16f;
     private GoogleMap mMap;
     private View mapView;
     private Context mContext;
-    private View locationButton;
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private PlacesClient placesClient;
     private Location mLastKnownLocation;
-    private LatLng mDestination;
-    private com.google.maps.model.LatLng mSource;
-    private LocationCallback locationCallback;
+
+    private Spinner stateSpinner, citySpinner;
+    private Button getDetailButton;
+
 
     //Button
     private Button nearmeBtn;
@@ -96,7 +103,53 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Vi
     public void onViewCreated(@NonNull View view , @Nullable Bundle savedInstanceState) {
         super.onViewCreated ( view , savedInstanceState );
         mContext = getContext ( );
-        nearmeBtn = getActivity ( ).findViewById ( R.id.nearMeBtn );
+        nearmeBtn = view.findViewById ( R.id.mapGetDetailsButton);
+
+        stateSpinner = view.findViewById ( R.id.selectStateSpinner );
+        citySpinner = view.findViewById ( R.id.selectBranchSpinner );
+        getDetailButton = view.findViewById ( R.id.mapGetDetailsButton );
+        getDetailButton.setVisibility ( View.GONE );
+        citySpinner.setVisibility ( View.GONE );
+
+
+        ArrayAdapter<String> stateAdapter = new ArrayAdapter<> ( mContext, android.R.layout.simple_list_item_1, MapStringConstants.mapStateSelectionOptions );
+        stateAdapter.setDropDownViewResource ( R.layout.spinner_item );
+        stateSpinner.setAdapter ( stateAdapter );
+
+        stateSpinner.setOnItemSelectedListener ( new AdapterView.OnItemSelectedListener ( ) {
+            @Override
+            public void onItemSelected(AdapterView<?> parent , View view , int position , long id) {
+                 stateSpinner.setSelection ( position );
+                Toast.makeText ( getContext ( ) , stateSpinner.getSelectedItem ().toString () , Toast.LENGTH_SHORT ).show ( );
+                String state = stateSpinner.getSelectedItem ().toString ().toLowerCase ();
+                String[] city = MapStringConstants.getCity ( state );
+                citySpinner.setVisibility ( View.VISIBLE );
+                ArrayAdapter<String > cityAdapter = new ArrayAdapter<> ( getContext (), android.R.layout.simple_list_item_1, city );
+                cityAdapter.setDropDownViewResource ( R.layout.spinner_item );
+                citySpinner.setAdapter ( cityAdapter );
+                citySpinner.setOnItemSelectedListener ( new AdapterView.OnItemSelectedListener ( ) {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent , View view , int position , long id) {
+                        getDetailButton.setVisibility ( View.VISIBLE );
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                } );
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        } );
+
         nearmeBtn.setOnClickListener ( this );
         mLastKnownLocation = null;
 
@@ -118,20 +171,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Vi
         mMap = googleMap;
         getLocationPermission ( );
 
-        //this code has been copied from my previous project. THe working is no different. Can create a new function as well
-
-      /*  if (mapView != null && mapView.findViewById(Integer.parseInt("1")) != null) {
-            View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            layoutParams.setMargins(0, 0, 40, 180);
-        }else {
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            getDeviceLocation();
-
-        }*/
         //Check if GPS is enabled or not and request user to enable it
         LocationRequest locationRequest = LocationRequest.create ( );
         locationRequest.setInterval ( 10000 );
@@ -171,11 +210,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Vi
                 PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission ( mContext , Manifest.permission.ACCESS_COARSE_LOCATION ) !=
                         PackageManager.PERMISSION_GRANTED ) {
-            // Toast.makeText(getActivity(), "Permission Error", Toast.LENGTH_LONG).show();
-            /*ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[] {
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION },
-                    5);*/
+
             Dexter.withActivity ( getActivity ( ) )
                     .withPermission ( Manifest.permission.ACCESS_FINE_LOCATION )
                     .withListener ( new PermissionListener ( ) {
@@ -191,7 +226,7 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Vi
                         public void onPermissionDenied(PermissionDeniedResponse response) {
                             if ( response.isPermanentlyDenied ( ) ) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder ( (mContext) );
-                                builder.setTitle ( "Permission Denied" ).setMessage ( "Permission has been permanently denied. Plese change the location permission setting." )
+                                builder.setTitle ( "Permission Denied" ).setMessage ( "Permission has been permanently denied. Please change the location permission setting." )
                                         .setNegativeButton ( "Cancel" , null )
                                         .setPositiveButton ( "OK" , new DialogInterface.OnClickListener ( ) {
                                             @Override
@@ -225,15 +260,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Vi
         if (mapView != null && mapView.findViewById(Integer.parseInt("1")) != null) {
             View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_END, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            layoutParams.setMargins(20, 10, 0, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+            layoutParams.setMargins(0, 180, 180, 0);
 
         }
 
@@ -254,14 +283,35 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback, Vi
     @Override
     public void onClick(View v) {
 
-        if ( v.getId ( ) == R.id.nearMeBtn ) {
-            mMap.addMarker ( new MarkerOptions ( ).position ( alexandria ).title ( "Alexandria" ) );
-            mMap.addMarker ( new MarkerOptions ( ).position ( lidcombe ).title ( "Lidcombe" ) );
-            mMap.addMarker ( new MarkerOptions ( ).position ( sevenhills ).title ( "Seven Hills" ) );
-            mMap.addMarker ( new MarkerOptions ( ).position ( silverwater ).title ( "Silverwater" ) );
-            mMap.moveCamera ( CameraUpdateFactory.newLatLngZoom ( lidcombe , 10f ) );
+        if ( v.getId ( ) == R.id.mapGetDetailsButton ) {
+            if(citySpinner.getSelectedItem ().equals ( "Alexandria Branch" )){
+               new MapStringConstants.Alexandria ();
+                LocationDetailData data = new LocationDetailData ( MapStringConstants.Alexandria.alexandriaLatLng,
+                        MapStringConstants.Alexandria.name,
+                        MapStringConstants.Alexandria.address,
+                        MapStringConstants.Alexandria.phone,
+                        MapStringConstants.Alexandria.openingHours);
+                openBranchDetailDialog (data);
+            }else if(citySpinner.getSelectedItem ().equals ( "Seven Hills Branch" )){
+                new MapStringConstants.Sevenhills ();
+                LocationDetailData data = new LocationDetailData ( MapStringConstants.Sevenhills.sevenhills,
+                        MapStringConstants.Sevenhills.name,
+                        MapStringConstants.Sevenhills.address,
+                        MapStringConstants.Sevenhills.phone,
+                        MapStringConstants.Sevenhills.openingHours);
+
+                openBranchDetailDialog (data);
+            }
+
 
 
         }
+    }
+
+    private void openBranchDetailDialog(LocationDetailData data) {
+        BranchDetailDialog dialog = new BranchDetailDialog ( data );
+        dialog.show ( getChildFragmentManager (), "branch location" );
+        mMap.moveCamera ( CameraUpdateFactory.newLatLngZoom ( data.getLatLng () , DEFAULT_ZOOM ) );
+        mMap.addMarker ( new MarkerOptions ( ).position ( data.getLatLng () ).title ( data.getName () ) );
     }
 }

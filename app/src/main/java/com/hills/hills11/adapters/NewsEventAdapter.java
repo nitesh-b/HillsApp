@@ -59,7 +59,6 @@ public class NewsEventAdapter extends RecyclerView.Adapter<NewsEventAdapter.News
             }
         } );
 
-
     }
 
     @Override
